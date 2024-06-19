@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
+import { useBeerContext } from "../Context/Context";
 
 const Home = () => {
-  const [beers, setBeers] = useState([]);
-
-  const getBeers = async () => {
-    const res = await fetch("https://api.sampleapis.com/beers/ale");
-    const data = await res.json();
-    setBeers(data);
-  };
-
-  useEffect(() => {
-    getBeers();
-  }, []);
+  const { state, dispatch } = useBeerContext();
 
   return (
     <div className="grid">
-      {beers.length
-        ? beers.map((beer) => <Card data={beer} key={beer.id} />)
-        : null}
+      {state.beers.length &&
+        state.beers.map((beer) => (
+          <Card data={beer} key={beer.id}>
+            <button
+              onClick={() => dispatch({ type: "ADD_CART", payload: beer })}
+            >
+              🛒
+            </button>
+          </Card>
+        ))}
     </div>
   );
 };

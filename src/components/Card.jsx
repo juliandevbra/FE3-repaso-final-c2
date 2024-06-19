@@ -1,10 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useBeerContext } from "../Context/Context";
 
-const Card = ({ data }) => {
-  const { setCart } = useBeerContext();
-
+const Card = ({ data, children }) => {
   return (
     <div className="card">
       <Link to={"/beer/" + data.id}>
@@ -13,7 +10,7 @@ const Card = ({ data }) => {
 
       <p>{data.price}</p>
       <img src={data.image} alt="beer-detail" />
-      <button onClick={() => setCart((prev) => [...prev, data])}>🛒</button>
+      {children}
     </div>
   );
 };
