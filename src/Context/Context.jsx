@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import Swal from "sweetalert2";
 
 const BeerContext = createContext();
 
@@ -34,6 +35,8 @@ const initialState = {
 const Context = ({ children }) => {
   // const [cart, setCart] = useState(lsCart);
   // const [beers, setBeers] = useState([]);
+  const url = "https://api.sampleapis.com/beers/ale";
+  // const url = "https://api.punkapi.com/v2/beers";
   const [state, dispatch] = useReducer(reducer, initialState);
   console.log(state);
 
@@ -42,9 +45,19 @@ const Context = ({ children }) => {
   }, [state.cart]);
 
   const getBeers = async () => {
-    const res = await fetch("https://api.sampleapis.com/beers/ale");
-    const data = await res.json();
-    dispatch({ type: "GET_BEERS", payload: data });
+    try {
+      const res = await fetch(url);
+      console.log(res);
+      const data = await res.json();
+      dispatch({ type: "GET_BEERS", payload: data });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error al traer la lista de cervezas!",
+        footer: err,
+      });
+    }
   };
 
   useEffect(() => {
